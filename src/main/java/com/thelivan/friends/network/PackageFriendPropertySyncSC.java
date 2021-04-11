@@ -1,7 +1,7 @@
-package com.thelivan.friendmod.network;
+package com.thelivan.friends.network;
 
-import com.thelivan.friendmod.capabilities.FriendProvider;
-import com.thelivan.friendmod.capabilities.IFriendCAP;
+import com.thelivan.friends.capabilities.FriendProvider;
+import com.thelivan.friends.capabilities.IFriendCAP;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.network;
+package com.thelivan.friends.network;
 
 import java.util.UUID;
 import io.netty.buffer.ByteBuf;

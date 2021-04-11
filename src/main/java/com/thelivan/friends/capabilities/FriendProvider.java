@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.capabilities;
+package com.thelivan.friends.capabilities;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;

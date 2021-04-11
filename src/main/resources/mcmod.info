@@ -1,16 +1,11 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "friends",
+  "name": "Friends Mod",
+  "description": "Old port (from 1.7.10) of friends system.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+  "url": "https://github.com/TheLivan/friendsmod-1.12.2",
+  "authorList": ["TheLivan"]
 }
 ]

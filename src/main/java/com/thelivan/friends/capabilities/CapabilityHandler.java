@@ -1,10 +1,10 @@
-package com.thelivan.friendmod.capabilities;
+package com.thelivan.friends.capabilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thelivan.friendmod.FriendMOD;
-import com.thelivan.friendmod.network.PackageFriendPropertySyncSC;
+import com.thelivan.friends.FriendMOD;
+import com.thelivan.friends.network.PackageFriendPropertySyncSC;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;

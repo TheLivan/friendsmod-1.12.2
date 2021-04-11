@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.client.gui;
+package com.thelivan.friends.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

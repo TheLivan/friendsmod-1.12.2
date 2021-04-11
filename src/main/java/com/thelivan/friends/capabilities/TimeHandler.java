@@ -1,10 +1,10 @@
-package com.thelivan.friendmod.capabilities;
+package com.thelivan.friends.capabilities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.thelivan.friendmod.FriendMOD;
+import com.thelivan.friends.FriendMOD;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 

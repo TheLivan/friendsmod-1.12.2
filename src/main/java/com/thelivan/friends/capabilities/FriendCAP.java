@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.capabilities;
+package com.thelivan.friends.capabilities;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -19,9 +19,9 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 
 import com.thelivan.Division;
-import com.thelivan.friendmod.FriendMOD;
-import com.thelivan.friendmod.network.PackageFriendPropertySyncSC;
-import com.thelivan.friendmod.network.PackageMessageSC;
+import com.thelivan.friends.FriendMOD;
+import com.thelivan.friends.network.PackageFriendPropertySyncSC;
+import com.thelivan.friends.network.PackageMessageSC;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;

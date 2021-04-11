@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.client;
+package com.thelivan.friends.client;
 
 import org.lwjgl.input.Keyboard;
 

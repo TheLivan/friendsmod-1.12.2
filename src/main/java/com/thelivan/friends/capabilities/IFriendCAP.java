@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.capabilities;
+package com.thelivan.friends.capabilities;
 
 import java.util.HashMap;
 import java.util.UUID;

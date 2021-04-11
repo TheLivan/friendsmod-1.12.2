@@ -1,11 +1,10 @@
-package com.thelivan.friendmod.network;
+package com.thelivan.friends.network;
 
 import java.util.UUID;
 
 import com.thelivan.Division;
-import com.thelivan.friendmod.FriendMOD;
-import com.thelivan.friendmod.capabilities.FriendProvider;
-import com.thelivan.friendmod.capabilities.IFriendCAP;
+import com.thelivan.friends.capabilities.FriendProvider;
+import com.thelivan.friends.capabilities.IFriendCAP;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -18,24 +17,29 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PackageRemoveFriendCS implements IMessage, IMessageHandler<PackageRemoveFriendCS, IMessage> {
-	public String friendName;
-	public UUID friendID;
+public class PackageAddFriendCS implements IMessage, IMessageHandler<PackageAddFriendCS, IMessage> {
+	private String friendName;
+	private UUID friendID;
 
-	public PackageRemoveFriendCS() { }
+	public PackageAddFriendCS() { }
 
-	public PackageRemoveFriendCS(UUID friendID, String friendName) {
+	public PackageAddFriendCS(UUID friendID, String friendName) {
 		this.friendID = friendID;
 		this.friendName = friendName;
 	}
 
 	@Override
-	public IMessage onMessage(PackageRemoveFriendCS packet, MessageContext message) {
+	public IMessage onMessage(PackageAddFriendCS packet, MessageContext message) {
 		if (!Division.SERVER) return null;
 		EntityPlayer p = message.getServerHandler().player;
-		IFriendCAP cap = p.getCapability(FriendProvider.FRIEND_CAP, null);
-		cap.removeFriend(p.getDisplayNameString(), p.getUniqueID(), packet.friendName, packet.friendID);
-		cap.markDirty(p);
+		EntityPlayer playerToAdd = p.world.getPlayerEntityByName(packet.friendName);
+		if (playerToAdd != null) {
+			IFriendCAP cap = p.getCapability(FriendProvider.FRIEND_CAP, null);
+			cap.addFriend(p.getDisplayName().getFormattedText(), p.getUniqueID(), packet.friendName, packet.friendID);
+			cap.markDirty(p);
+			IFriendCAP caps = playerToAdd.getCapability(FriendProvider.FRIEND_CAP, null);
+			caps.markDirty(playerToAdd);
+		}
 		return null;
 	}
 	

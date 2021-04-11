@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.client;
+package com.thelivan.friends.client;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
@@ -19,11 +19,11 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import org.lwjgl.opengl.GL11;
 
-import com.thelivan.friendmod.FriendMOD;
-import com.thelivan.friendmod.capabilities.FriendProvider;
-import com.thelivan.friendmod.capabilities.IFriendCAP;
-import com.thelivan.friendmod.client.gui.GuiFriendMenu;
-import com.thelivan.friendmod.network.PackageAddFriendCS;
+import com.thelivan.friends.FriendMOD;
+import com.thelivan.friends.capabilities.FriendProvider;
+import com.thelivan.friends.capabilities.IFriendCAP;
+import com.thelivan.friends.client.gui.GuiFriendMenu;
+import com.thelivan.friends.network.PackageAddFriendCS;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

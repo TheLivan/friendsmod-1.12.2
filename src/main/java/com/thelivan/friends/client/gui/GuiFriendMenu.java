@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.client.gui;
+package com.thelivan.friends.client.gui;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.thelivan.friendmod.FriendMOD;
-import com.thelivan.friendmod.capabilities.FriendProvider;
-import com.thelivan.friendmod.network.PackageRemoveFriendCS;
+import com.thelivan.friends.FriendMOD;
+import com.thelivan.friends.capabilities.FriendProvider;
+import com.thelivan.friends.network.PackageRemoveFriendCS;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

@@ -1,16 +1,16 @@
-package com.thelivan.friendmod;
+package com.thelivan.friends;
 
-import com.thelivan.friendmod.capabilities.CapabilityHandler;
-import com.thelivan.friendmod.capabilities.FriendCAP;
-import com.thelivan.friendmod.capabilities.IFriendCAP;
-import com.thelivan.friendmod.capabilities.StorageFriends;
-import com.thelivan.friendmod.capabilities.TimeHandler;
-import com.thelivan.friendmod.client.ClientEventHandler;
-import com.thelivan.friendmod.client.KeysRegister;
-import com.thelivan.friendmod.network.PackageAddFriendCS;
-import com.thelivan.friendmod.network.PackageFriendPropertySyncSC;
-import com.thelivan.friendmod.network.PackageMessageSC;
-import com.thelivan.friendmod.network.PackageRemoveFriendCS;
+import com.thelivan.friends.capabilities.CapabilityHandler;
+import com.thelivan.friends.capabilities.FriendCAP;
+import com.thelivan.friends.capabilities.IFriendCAP;
+import com.thelivan.friends.capabilities.StorageFriends;
+import com.thelivan.friends.capabilities.TimeHandler;
+import com.thelivan.friends.client.ClientEventHandler;
+import com.thelivan.friends.client.KeysRegister;
+import com.thelivan.friends.network.PackageAddFriendCS;
+import com.thelivan.friends.network.PackageFriendPropertySyncSC;
+import com.thelivan.friends.network.PackageMessageSC;
+import com.thelivan.friends.network.PackageRemoveFriendCS;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -26,13 +26,13 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod(modid = FriendMOD.MODID, name = FriendMOD.NAME, version = FriendMOD.VERSION)
 public class FriendMOD {
 	
-	public static final String MODID = "friendmod",
+	public static final String MODID = "friends",
 			NAME = "Friend Mod",
 			VERSION = "2.1";
     
     public static TimeHandler timehandler = new TimeHandler();
     
-    public static SimpleNetworkWrapper network; 
+    public static SimpleNetworkWrapper network;
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) {
