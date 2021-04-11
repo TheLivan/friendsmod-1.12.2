@@ -19,9 +19,9 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 
 import com.thelivan.Division;
-import com.thelivan.friendmod.FriendMod;
-import com.thelivan.friendmod.network.PackageFriendPropertySync;
-import com.thelivan.friendmod.network.PackageMessage;
+import com.thelivan.friendmod.FriendMOD;
+import com.thelivan.friendmod.network.PackageFriendPropertySyncSC;
+import com.thelivan.friendmod.network.PackageMessageSC;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -41,29 +41,29 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class FriendCAP implements IFriendCAP {
-
 	public static final String NAME = CapabilityHandler.FRIENDCAP_NAME.toString();	
+	
 	private HashMap<UUID, String> friends = new HashMap<>();
 
 	@Override
 	public void addFriend(String playerName, UUID playerID, String friendName, UUID friendID) {
 		if(!Division.SERVER) return;
 		if (contains(friendID)) return;
-		if (FriendMod.timehandler.contains(friendID, playerID)) {
+		if (FriendMOD.timehandler.contains(friendID, playerID)) {
 			EntityPlayer friendPlayer = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getPlayerEntityByName(friendName);
 			if (friendPlayer == null) return;
-			FriendMod.timehandler.remove(friendID, playerID);
+			FriendMOD.timehandler.remove(friendID, playerID);
 			friends.put(friendID, friendName);
 			IFriendCAP cap = friendPlayer.getCapability(FriendProvider.FRIEND_CAP, null);
 			cap.addFriendForcibly(playerName, playerID);
 		} else {
-			if(!FriendMod.timehandler.containsOneArg(friendID)){
-				FriendMod.timehandler.add(playerID, friendID);
+			if(!FriendMOD.timehandler.containsOneArg(friendID)){
+				FriendMOD.timehandler.add(playerID, friendID);
 				EntityPlayer friendPlayer = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getPlayerEntityByName(friendName);
 				if (friendPlayer == null) return;
-				FriendMod.network.sendTo(new PackageMessage(playerName), (EntityPlayerMP) friendPlayer);
+				FriendMOD.network.sendTo(new PackageMessageSC(playerName), (EntityPlayerMP) friendPlayer);
 			}else {
-				FriendMod.timehandler.add(playerID, friendID);
+				FriendMOD.timehandler.add(playerID, friendID);
 			}
 		}
 	}
@@ -145,7 +145,7 @@ public class FriendCAP implements IFriendCAP {
 	public void markDirty(EntityPlayer player) {
 		if (!player.world.isRemote){
             try {
-                FriendMod.network.sendTo(new PackageFriendPropertySync(saveNBTData(), player.getEntityId()), (EntityPlayerMP) player);
+                FriendMOD.network.sendTo(new PackageFriendPropertySyncSC(saveNBTData(), player.getEntityId()), (EntityPlayerMP) player);
             }
             catch (NoSuchMethodError e){
                 e.printStackTrace();
@@ -186,8 +186,7 @@ public class FriendCAP implements IFriendCAP {
 				NBTTagCompound tag = list.getCompoundTagAt(i);
 				friends.put(UUID.fromString(tag.getString("friendID")), tag.getString("friendName"));
 			}
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-				checkUpdate();
+			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) checkUpdate();
 		}
 	}
 }

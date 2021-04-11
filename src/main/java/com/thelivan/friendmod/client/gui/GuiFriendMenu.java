@@ -1,4 +1,4 @@
-package com.thelivan.friendmod.gui;
+package com.thelivan.friendmod.client.gui;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.thelivan.friendmod.FriendMod;
+import com.thelivan.friendmod.FriendMOD;
 import com.thelivan.friendmod.capabilities.FriendProvider;
-import com.thelivan.friendmod.network.PackageRemoveFriend;
+import com.thelivan.friendmod.network.PackageRemoveFriendCS;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,7 +24,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
-public class FriendScreen extends GuiScreen {
+public class GuiFriendMenu extends GuiScreen {
     private List<FriendButton> buttons;
     private Slider slider;
     private GuiButton closeButton;
@@ -49,7 +49,7 @@ public class FriendScreen extends GuiScreen {
 
                 @Override
                 public void onMouseClick(String text) {
-                    FriendMod.network.sendToServer(new PackageRemoveFriend(getKeyByValue(mc.player.getCapability(FriendProvider.FRIEND_CAP, null).getFriends(), text), text));
+                    FriendMOD.network.sendToServer(new PackageRemoveFriendCS(getKeyByValue(mc.player.getCapability(FriendProvider.FRIEND_CAP, null).getFriends(), text), text));
                 }
             });
 

@@ -3,8 +3,8 @@ package com.thelivan.friendmod.capabilities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thelivan.friendmod.FriendMod;
-import com.thelivan.friendmod.network.PackageFriendPropertySync;
+import com.thelivan.friendmod.FriendMOD;
+import com.thelivan.friendmod.network.PackageFriendPropertySyncSC;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class CapabilityHandler {
 
-	public static final ResourceLocation FRIENDCAP_NAME = new ResourceLocation(FriendMod.MODID, "friendcap");
+	public static final ResourceLocation FRIENDCAP_NAME = new ResourceLocation(FriendMOD.MODID, "friendcap");
 
 	@SubscribeEvent
 	public void attachCapability(AttachCapabilitiesEvent event) {
@@ -57,7 +57,7 @@ public class CapabilityHandler {
 	public void playerStartedTracking(PlayerEvent.StartTracking e) {
 		IFriendCAP cap = e.getTarget().getCapability(FriendProvider.FRIEND_CAP, null);
 		if (cap != null)
-			FriendMod.network.sendTo(new PackageFriendPropertySync(cap.saveNBTData(), e.getTarget().getEntityId()),(EntityPlayerMP) e.getEntityPlayer());
+			FriendMOD.network.sendTo(new PackageFriendPropertySyncSC(cap.saveNBTData(), e.getTarget().getEntityId()),(EntityPlayerMP) e.getEntityPlayer());
 	}
 
 	@SubscribeEvent
@@ -67,12 +67,12 @@ public class CapabilityHandler {
 		EntityPlayer player = (EntityPlayer) e.getEntity();
 		IFriendCAP cap = player.getCapability(FriendProvider.FRIEND_CAP, null);
 		if (cap != null && player != null)
-			FriendMod.network.sendTo(new PackageFriendPropertySync(cap.saveNBTData(), player.getEntityId()), (EntityPlayerMP) player);
+			FriendMOD.network.sendTo(new PackageFriendPropertySyncSC(cap.saveNBTData(), player.getEntityId()), (EntityPlayerMP) player);
 	}
 
 	@SubscribeEvent
 	public void PlayerTickEvent(PlayerTickEvent e) {
 		if (e.player.world.isRemote) return;
-		FriendMod.timehandler.tick();
+		FriendMOD.timehandler.tick();
 	}
 }

@@ -4,13 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.thelivan.friendmod.FriendMod;
+import com.thelivan.friendmod.FriendMOD;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TimeHandler {
-	
 	private List<AddArgs> timeMap = new ArrayList<>();
+	
+	public void add(UUID playerID, UUID friendID) {
+		timeMap.add(new AddArgs(playerID, friendID));
+	}
+	
+	public boolean contains(UUID player, UUID friend) {
+		return AddArgs.contains(timeMap, player, friend);
+	}
+	
+	public boolean containsOneArg(UUID friend) {
+		return AddArgs.containsOneArg(timeMap, friend);
+	}
+	
+	public void remove(UUID player, UUID friend) {
+		AddArgs.remove(timeMap, player, friend);
+	}
+	
+	public void tick() {
+        if (FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld() != null){
+            List<AddArgs> toRemove = new ArrayList<>();
+            for (AddArgs args : timeMap)
+                if (args.tick()) {
+                    toRemove.add(args);
+                }
+            timeMap.removeAll(toRemove);
+        }
+	}
 	
 	private static class AddArgs {
 		private UUID player;
@@ -48,33 +74,6 @@ public class TimeHandler {
                 if (args.player.equals(player) && args.friend.equals(friend))
                     toRemove.add(args);
             list.removeAll(toRemove);
-        }
-	}
-	public void add(UUID playerID, UUID friendID) {
-		timeMap.add(new AddArgs(playerID, friendID));
-	}
-	
-	public boolean contains(UUID player, UUID friend) {
-		return AddArgs.contains(timeMap, player, friend);
-	}
-	
-	public boolean containsOneArg(UUID friend) {
-		return AddArgs.containsOneArg(timeMap, friend);
-	}
-	
-	public void remove(UUID player, UUID friend) {
-		AddArgs.remove(timeMap, player, friend);
-	}
-	
-	public void tick() {
-		//System.out.println(timeMap);
-        if (FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld() != null){
-            List<AddArgs> toRemove = new ArrayList<>();
-            for (AddArgs args : timeMap)
-                if (args.tick()) {
-                    toRemove.add(args);
-                }
-            timeMap.removeAll(toRemove);
         }
 	}
 }

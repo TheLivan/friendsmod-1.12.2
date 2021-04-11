@@ -17,19 +17,35 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PackageFriendPropertySync implements IMessage {
+public class PackageFriendPropertySyncSC implements IMessage, IMessageHandler<PackageFriendPropertySyncSC, IMessage> {
 
 	public NBTTagCompound data;
-	 public int playerId;
+	public int playerId;
 
-	public PackageFriendPropertySync() {
-	}
+	public PackageFriendPropertySyncSC() { }
 
-	public PackageFriendPropertySync(NBTBase data, int id) {
+	public PackageFriendPropertySyncSC(NBTBase data, int id) {
 		this.data = (NBTTagCompound) data;
 		playerId = id;
 	}
 
+	@Override
+	public IMessage onMessage(PackageFriendPropertySyncSC packet, MessageContext ctx) {
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			public void run() {
+				World world = FMLClientHandler.instance().getClient().world;
+				if (world == null) return;
+				Entity p = world.getEntityByID(packet.playerId);
+				if (p != null && p instanceof EntityPlayer) {
+					NBTTagCompound data = packet.data;
+					IFriendCAP cap = p.getCapability(FriendProvider.FRIEND_CAP, null);
+					cap.loadNBTData(data);
+				}
+			}
+		});
+		return null;
+	}
+	
 	@Override
 	public void toBytes(ByteBuf buf) {
 		ByteBufUtils.writeTag(buf, data);
@@ -40,23 +56,5 @@ public class PackageFriendPropertySync implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		data = ByteBufUtils.readTag(buf);
 		playerId = buf.readInt();
-	}
-
-	public static class Handler implements IMessageHandler<PackageFriendPropertySync, IMessage> {
-
-		@Override
-		public IMessage onMessage(PackageFriendPropertySync packet, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(new Runnable(){  public void run() {
-                World world = FMLClientHandler.instance().getClient().world;
-                if (world==null) return;
-                Entity p = world.getEntityByID(packet.playerId);
-                if (p !=null && p instanceof EntityPlayer) {
-                	NBTTagCompound data = packet.data;
-        			IFriendCAP cap = p.getCapability(FriendProvider.FRIEND_CAP, null);
-        			cap.loadNBTData(data);
-                }
-            }});
-            return null;
-		}
 	}
 }

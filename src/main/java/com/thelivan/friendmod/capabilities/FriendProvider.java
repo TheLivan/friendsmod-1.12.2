@@ -32,5 +32,4 @@ public class FriendProvider implements ICapabilitySerializable<NBTBase> {
 	public void deserializeNBT(NBTBase nbt) {
 		FRIEND_CAP.getStorage().readNBT(FRIEND_CAP, this.instance, null, nbt);
 	}
-
 }

@@ -15,14 +15,20 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PackageMessage implements IMessage {
+public class PackageMessageSC implements IMessage, IMessageHandler<PackageMessageSC, IMessage> {
+	public String playerName;
 	
-	String playerName;
+	public PackageMessageSC() { }
 	
-	public PackageMessage() {}
-	
-	public PackageMessage(String playerName) {
+	public PackageMessageSC(String playerName) {
 		this.playerName = playerName;
+	}
+	
+	@Override
+	public IMessage onMessage(PackageMessageSC packet, MessageContext message) {
+		String playerName = packet.playerName;
+		clientPlayer().sendMessage(new TextComponentString(I18n.format("friendmod.language.pmessage", TextFormatting.DARK_AQUA)+playerName+I18n.format("friendmod.language.addmessage", TextFormatting.DARK_AQUA)));
+		return null;
 	}
 	
 	@Override
@@ -33,25 +39,6 @@ public class PackageMessage implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		ByteBufUtils.writeUTF8String(buf, playerName);
-	}
-	
-	public static class Handler implements IMessageHandler<PackageMessage, IMessage> {
-
-		@Override
-		public IMessage onMessage(PackageMessage packet, MessageContext message) {
-			if (message.side.isClient())
-				act(packet);
-			else
-				act(message.getServerHandler().player, packet);
-			return null;
-		}
-
-		private void act(PackageMessage packet) {
-			String playerName = packet.playerName;
-			clientPlayer().sendMessage(new TextComponentString(I18n.format("friendmod.language.pmessage", TextFormatting.DARK_AQUA)+playerName+I18n.format("friendmod.language.addmessage", TextFormatting.DARK_AQUA)));
-		}
-
-		private void act(EntityPlayerMP p, PackageMessage packet) {}
 	}
 
 	@SideOnly(Side.CLIENT)

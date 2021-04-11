@@ -1,65 +1,73 @@
-package com.thelivan.friendmod.event;
+package com.thelivan.friendmod.client;
 
-
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_GREATER;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glAlphaFunc;
+import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glDepthMask;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glNormal3f;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import org.lwjgl.opengl.GL11;
 
-import com.thelivan.friendmod.FriendMod;
+import com.thelivan.friendmod.FriendMOD;
 import com.thelivan.friendmod.capabilities.FriendProvider;
 import com.thelivan.friendmod.capabilities.IFriendCAP;
-import com.thelivan.friendmod.client.Keys;
-import com.thelivan.friendmod.gui.ModGuiHandler;
-import com.thelivan.friendmod.network.PackageAddFriend;
+import com.thelivan.friendmod.client.gui.GuiFriendMenu;
+import com.thelivan.friendmod.network.PackageAddFriendCS;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
-public class ClientEvent {
-	Minecraft mc = Minecraft.getMinecraft();
+public class ClientEventHandler {
+	private static final Minecraft MC = Minecraft.getMinecraft();
 	
 	private static final String toAddMessage = "[G] \u0432 \u0434\u0440\u0443\u0437\u044C\u044F";
 	
 	@SubscribeEvent
-	public void Key(KeyInputEvent event) {
-		 EntityPlayer player = mc.player;
-		if (Keys.addfriend.isKeyDown()) {
-			Entity e = mc.objectMouseOver.entityHit;
-	        if (e != null && e instanceof EntityPlayer) {
-	        	EntityPlayer p = (EntityPlayer) e;
-	        	FriendMod.network.sendToServer(new PackageAddFriend(p.getUniqueID(), p.getDisplayNameString()));
+	public void Key(KeyInputEvent ev) {
+		 EntityPlayer player = MC.player;
+		if (KeysRegister.addFriend.isKeyDown()) {
+			Entity entity = MC.objectMouseOver.entityHit;
+	        if (entity != null && entity instanceof EntityPlayer) {
+	        	EntityPlayer p = (EntityPlayer) entity;
+	        	FriendMOD.network.sendToServer(new PackageAddFriendCS(p.getUniqueID(), p.getDisplayNameString()));
 	            return;
 	        }
 		}
-		if (Keys.removefriend.isKeyDown()) {
-			mc.player.openGui(FriendMod.instance, ModGuiHandler.FRIEND_SCREEN, mc.world, 0, 0, 0);
+		if (KeysRegister.friendMenu.isKeyDown()) {
+			MC.displayGuiScreen(new GuiFriendMenu());
 		}
 	}
 	
     @SubscribeEvent
-    public void renderNick(RenderLivingEvent.Specials.Pre e) {
-        if (e.getEntity() instanceof EntityPlayer && e.getEntity() != Minecraft.getMinecraft().player) {
-            Minecraft mc = Minecraft.getMinecraft();
-            EntityPlayer player = mc.player;
-            EntityPlayer renderPlayer = (EntityPlayer) e.getEntity();
+    public void renderNick(RenderLivingEvent.Specials.Pre ev) {
+        if (ev.getEntity() instanceof EntityPlayer && ev.getEntity() != MC.player) {
+            EntityPlayer player = MC.player;
+            EntityPlayer renderPlayer = (EntityPlayer) ev.getEntity();
             IFriendCAP cap = player.getCapability(FriendProvider.FRIEND_CAP, null);
             
             boolean isFriend = cap.contains(renderPlayer.getUniqueID());
-            if (isFriend)
-                e.setCanceled(true);
-            if (!isEnabled(renderPlayer))
-                return;
+            if (isFriend) ev.setCanceled(true);
+            if (!isEnabled(renderPlayer)) return;
 
             glAlphaFunc(GL_GREATER, 0.1F);
             
@@ -67,11 +75,11 @@ public class ClientEvent {
             
             if (d3 <= 4096) {
                 String p_147906_2_ = renderPlayer.getDisplayNameString();
-                FontRenderer fontrenderer = mc.fontRenderer;
+                FontRenderer fontrenderer = MC.fontRenderer;
                 float f = 1.6F;
                 float f1 = 0.016666668F * f;
                 glPushMatrix();
-                glTranslatef((float) e.getX() + 0.0F, (float) e.getY() + renderPlayer.height + 0.5F, (float) e.getZ());
+                glTranslatef((float) ev.getX() + 0.0F, (float) ev.getY() + renderPlayer.height + 0.5F, (float) ev.getZ());
                 glNormal3f(0.0F, 1.0F, 0.0F);
                 glRotatef(-player.rotationYawHead, 0.0F, 1.0F, 0.0F);
                 glRotatef(player.rotationPitch, 1.0F, 0.0F, 0.0F);
@@ -88,7 +96,7 @@ public class ClientEvent {
                 glDisable(GL_TEXTURE_2D);
                 int j = fontrenderer.getStringWidth(p_147906_2_) / 2;
                 
-                boolean isHover = mc.objectMouseOver != null && mc.objectMouseOver.entityHit instanceof EntityPlayer && mc.objectMouseOver.entityHit == renderPlayer;
+                boolean isHover = MC.objectMouseOver != null && MC.objectMouseOver.entityHit instanceof EntityPlayer && MC.objectMouseOver.entityHit == renderPlayer;
                 
                 glEnable(GL_TEXTURE_2D);
                 
@@ -109,9 +117,7 @@ public class ClientEvent {
 		
     }
     
-    protected boolean isEnabled(EntityLivingBase e) {
-        Minecraft mc = Minecraft.getMinecraft();
-        return Minecraft.isGuiEnabled() && !e.isInvisibleToPlayer(mc.player);//&& e.riddenByEntities == null
+    private boolean isEnabled(EntityLivingBase entity) {
+        return Minecraft.isGuiEnabled() && !entity.isInvisibleToPlayer(MC.player); //&& e.riddenByEntities == null
     }
-	
 }
